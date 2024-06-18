@@ -6,7 +6,13 @@ from flask_migrate import Migrate
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:12345@localhost/database'
+database_uri = os.environ.get("DATABASE")
+if not database_uri:
+    raise RuntimeError("DATABASE environment variable not set")
+else:
+    print(f"Database URI: {database_uri}")
+#postgres://haway:G0MUqr51ZexhnP09BTaXqvJZF6qS6lOg@dpg-cpocfrqju9rs738meeng-a.frankfurt-postgres.render.com/database_crki
+app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads')
 db = SQLAlchemy(app)
